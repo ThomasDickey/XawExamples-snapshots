@@ -1,0 +1,23 @@
+1991-07-30  kit
+
+	* README: RCS_BASE
+
+1991-07-30  dickey@software.org
+
+	* README.x11r5: RCS_BASE
+
+1991-05-16  swick
+
+	* xtext.c: RCS_BASE
+
+1991-01-22  gildea
+
+	* xwidgets.c, xpanner.c, xmenu2.c, xscroll.c, xlabel.c, xcommand.c,
+	  xbuttonbox.c, xboxes.c, xrepeater.c, xmenu1.c, xlist.c, xhw.c,
+	  xcommand2.c, popup.c:
+	RCS_BASE
+
+1990-12-26  gildea
+
+	* Imakefile: RCS_BASE
+
