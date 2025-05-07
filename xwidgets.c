@@ -1,7 +1,7 @@
 /*
  * This example uses all the Athena widgets, and demonstrates timeouts.
  *
- * November 30, 1989 - Chris D. Peterson 
+ * November 30, 1989 - Chris D. Peterson
  */
 
 /*
@@ -23,38 +23,13 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
+#include <examples.h>
 
-#include <X11/Xatom.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/Box.h>
-#include <X11/Xaw/Clock.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Dialog.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/List.h>
-#include <X11/Xaw/Logo.h>
-#include <X11/Xaw/MenuButton.h>
-#include <X11/Xaw/Scrollbar.h>
-#include <X11/Xaw/SimpleMenu.h>
-#include <X11/Xaw/SmeBSB.h>
-#include <X11/Xaw/SmeLine.h>
-#include <X11/Xaw/StripChart.h>
-#include <X11/Xaw/Paned.h>
-#include <X11/Xaw/Toggle.h>
-#include <X11/Xaw/Viewport.h>
-
-#include <X11/Xaw/Cardinals.h>
-
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*input:                  True",
     "*Paned.width:            350",
     "*label.label:            At least one of each Athena Widget.",
@@ -83,23 +58,33 @@ String fallback_resources[] = {
     NULL,
 };
 
-static void Destroyed(), Quit(), Count(), Syntax(), CreateFormWithButtons();
-static void CreateBox(), Okay(), Scrolled(), Thumbed(), Finish();
-static void TimeSinceTouched();
+static void Destroyed CALLBACK_ARGS;
+static void Quit CALLBACK_ARGS;
+static void Count CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
+static void CreateFormWithButtons(Widget);
+static void CreateBox(Widget);
+static void Okay CALLBACK_ARGS;
+static void Scrolled CALLBACK_ARGS;
+static void Thumbed CALLBACK_ARGS;
+static void Finish(XtPointer, XtIntervalId *);
+static void TimeSinceTouched CALLBACK_ARGS;
 
-void 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
-    Widget toplevel, outer, dialog, box, quit, chart, list, viewport;
+    Widget toplevel, outer, dialog, quit, chart, list, viewport;
     XtAppContext app_con;
+
+#ifdef USE_X11R5
+    Widget box;
+#endif
 
     toplevel = XtAppInitialize(&app_con, "Xwidgets", NULL, ZERO,
 			       &argc, argv, fallback_resources,
 			       NULL, ZERO);
 
-    if (argc != 1) 
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     XtAddCallback( toplevel, XtNdestroyCallback, Destroyed, NULL );
@@ -107,19 +92,19 @@ char **argv;
     outer = XtCreateManagedWidget( "paned", panedWidgetClass, toplevel,
 				  NULL, ZERO);
 
-    quit = XtCreateManagedWidget( "quit", commandWidgetClass, outer, 
+    quit = XtCreateManagedWidget( "quit", commandWidgetClass, outer,
 				 NULL, ZERO);
     XtAddCallback( quit, XtNcallback, Quit, (XtPointer) toplevel);
 
     (void)XtCreateManagedWidget( "label", labelWidgetClass, outer, NULL, ZERO);
-    
-    dialog = XtCreateManagedWidget("dialog", dialogWidgetClass, outer, 
+
+    dialog = XtCreateManagedWidget("dialog", dialogWidgetClass, outer,
 				   NULL, ZERO);
 
     viewport = XtCreateManagedWidget( "viewport", viewportWidgetClass, outer,
 				     NULL, ZERO);
 
-    list = XtCreateManagedWidget("list", listWidgetClass, viewport, 
+    list = XtCreateManagedWidget("list", listWidgetClass, viewport,
 				 NULL, ZERO);
 
     XawDialogAddButton(dialog, "command", Okay, (XtPointer) list);
@@ -127,9 +112,11 @@ char **argv;
 
     CreateFormWithButtons(outer);
 
+#ifdef USE_X11R5
     box = XtCreateManagedWidget( "box", boxWidgetClass, outer, NULL, ZERO);
     (void) XtCreateManagedWidget(NULL, clockWidgetClass, box, NULL, ZERO);
     (void) XtCreateManagedWidget(NULL, logoWidgetClass, box, NULL, ZERO);
+#endif
 
     chart = XtCreateManagedWidget("stripChart", stripChartWidgetClass, outer,
 				  NULL, ZERO);
@@ -139,7 +126,7 @@ char **argv;
 
     CreateBox(outer);
 
-    (void) XtCreateManagedWidget("textFile", asciiTextWidgetClass, outer, 
+    (void) XtCreateManagedWidget("textFile", asciiTextWidgetClass, outer,
 				 NULL, ZERO);
 
     XtRealizeWidget(toplevel);
@@ -154,8 +141,7 @@ char **argv;
  */
 
 static void
-CreateFormWithButtons(parent)
-Widget parent;
+CreateFormWithButtons(Widget parent)
 {
     Widget form, label, button, menu;
     int i;
@@ -186,7 +172,7 @@ Widget parent;
 	(void) XtCreateManagedWidget(buf, smeBSBObjectClass, menu,
 				     NULL, ZERO);
 	if (i == 2)
-	    (void) XtCreateManagedWidget("menuButton", smeLineObjectClass, 
+	    (void) XtCreateManagedWidget("menuButton", smeLineObjectClass,
 					 menu, NULL, ZERO);
     }
 }
@@ -198,17 +184,16 @@ Widget parent;
  */
 
 static void
-CreateBox(parent)
-Widget parent;
+CreateBox(Widget parent)
 {
     Widget box, scrollbar, label;
-    
+
     box = XtCreateManagedWidget(NULL, boxWidgetClass, parent, NULL, ZERO);
 
     scrollbar = XtCreateManagedWidget("scrollbar", scrollbarWidgetClass, box,
 				      NULL, ZERO);
 
-    label = XtCreateManagedWidget("scroll_label", labelWidgetClass, box, 
+    label = XtCreateManagedWidget("scroll_label", labelWidgetClass, box,
 				  NULL, ZERO);
 
     XtAddCallback(scrollbar, XtNjumpProc, Thumbed, (XtPointer) label);
@@ -222,10 +207,8 @@ Widget parent;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf(stderr, "Usage: %s\n", call);
@@ -242,10 +225,11 @@ char *call;
  */
 
 /* ARGSUSED */
-static void 
-TimeSinceTouched(widget,closure,value_ptr)
-Widget widget;
-XtPointer closure, value_ptr;
+static void
+TimeSinceTouched(
+	Widget widget,
+	XtPointer closure _X_UNUSED,
+	XtPointer value_ptr)
 {
     double *value = (double *) value_ptr;
     static double old_value = 0.0;
@@ -276,16 +260,17 @@ XtPointer closure, value_ptr;
  *	Arguments: widget - the widget that called this callback.
  *                 closure, callData - *** UNUSED ***.
  *	Returns: none
- * 
+ *
  * NOTE:  The shell widget has a destroy callback that sets a five second
  *        timer, and at the end of that time the program exits.
  */
 
 /* ARGSUSED */
-static void 
-Quit(widget,closure,callData)
-Widget widget;
-XtPointer closure, callData;
+static void
+Quit(
+	Widget widget _X_UNUSED,
+	XtPointer closure,
+	XtPointer callData _X_UNUSED)
 {
     fprintf(stderr, "command callback.\n");
     XtDestroyWidget((Widget)closure);
@@ -293,23 +278,24 @@ XtPointer closure, callData;
 
 /*	Function Name: Count
  *	Description: This callback routin will increment that counter
- *                   and display the number as the label of the widget passed 
+ *                   and display the number as the label of the widget passed
  *                   in the closure.
  *	Arguments: widget - *** UNUSED ***
- *                 closure - a pointer to the label widge to display the 
+ *                 closure - a pointer to the label widge to display the
  *                           string in.
  *                 callData - *** UNUSED ***
  *	Returns: none
  */
 
 /* ARGSUSED */
-static void 
-Count(widget, closure, callData)
-Widget widget;
-XtPointer closure, callData;
+static void
+Count(
+	Widget widget _X_UNUSED,
+	XtPointer closure,
+	XtPointer callData _X_UNUSED)
 {
    Arg arg[1];
-   char text[10];
+   char text[20];
    static int count = 0;
 
    sprintf( text, " %d ", ++count );
@@ -329,10 +315,11 @@ XtPointer closure, callData;
  */
 
 /* ARGSUSED */
-static void 
-Okay(widget, clientData, callData)
-Widget widget;
-XtPointer clientData, callData;
+static void
+Okay(
+	Widget widget,
+	XtPointer clientData,
+	XtPointer callData _X_UNUSED)
 {
     Widget list_widget = (Widget) clientData;
     static String * list = NULL;
@@ -345,7 +332,7 @@ XtPointer clientData, callData;
 
     /*
      * The value returned by XawDialogGetValueString() does not remain good
-     * forever so we must store is somewhere.  This creates a memory leak 
+     * forever so we must store is somewhere.  This creates a memory leak
      * since I don't remember these values, and free them later.  I know about
      * it, but it doesn't seem worth fixing in this example.
      */
@@ -364,10 +351,11 @@ XtPointer clientData, callData;
  */
 
 /* ARGSUSED */
-static void 
-Scrolled(widget, label_ptr, value_ptr)
-Widget widget;
-XtPointer label_ptr, value_ptr;	
+static void
+Scrolled(
+	Widget widget _X_UNUSED,
+	XtPointer label_ptr,
+	XtPointer value_ptr)
 {
     int value = (int) value_ptr;
     Widget label = (Widget) label_ptr;
@@ -380,20 +368,21 @@ XtPointer label_ptr, value_ptr;
 }
 
 /*	Function Name: Thumbed.
- *	Description: Prints the location of the thumb as a percentage of the 
+ *	Description: Prints the location of the thumb as a percentage of the
  *                   height of the scrollbar into the label widget provided.
  *	Arguments: widget - *** UNUSED ***.
  *                 label_ptr - a pointer to the label widget.
- *                 top_ptr - a pointer to a float containing the location of 
+ *                 top_ptr - a pointer to a float containing the location of
  *                           of the scrollbar's thumb.
- *	Returns: 
+ *	Returns:
  */
 
 /* ARGSUSED */
-static void 
-Thumbed(widget, label_ptr, top_ptr)
-Widget widget;
-XtPointer label_ptr, top_ptr;	
+static void
+Thumbed(
+	Widget widget _X_UNUSED,
+	XtPointer label_ptr,
+	XtPointer top_ptr)
 {
     float top = *((float *) top_ptr);
     Widget label = (Widget) label_ptr;
@@ -413,9 +402,7 @@ XtPointer label_ptr, top_ptr;
 
 /* ARGSUSED */
 static void
-Finish(client_data, id)
-XtPointer client_data;
-XtIntervalId *id;
+Finish(XtPointer client_data _X_UNUSED, XtIntervalId *id _X_UNUSED)
 {
     /*
      * I should really destroy the app_context here, but I am lazy, and
@@ -426,7 +413,7 @@ XtIntervalId *id;
 }
 
 /*	Function Name: Destroyed
- *	Description: This is a Destroy callback that when called sets a 
+ *	Description: This is a Destroy callback that when called sets a
  *                   timeout function that will exit the program in 5 seconds.
  *	Arguments: widget - the widget that was just destroyed.
  *                 closure, callData - UNUSED.
@@ -434,10 +421,11 @@ XtIntervalId *id;
  */
 
 /* ARGSUSED */
-static void 
-Destroyed(widget, closure, callData)
-Widget widget;
-XtPointer closure, callData;		
+static void
+	Destroyed(
+	Widget widget,
+	XtPointer closure _X_UNUSED,
+	XtPointer callData _X_UNUSED)
 {
     fprintf( stderr, "Everything now destroyed; setting 5 second timer.\n" );
     XtAppAddTimeOut(XtWidgetToApplicationContext(widget), 5000, Finish, NULL);

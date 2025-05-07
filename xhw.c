@@ -2,7 +2,7 @@
  * This an example of how "Hello, World" could be written using
  * The X Toolkit and the Athena widget set.
  *
- * November 14, 1989 - Chris D. Peterson 
+ * November 14, 1989 - Chris D. Peterson
  */
 
 /*
@@ -24,17 +24,11 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-
-#include <X11/Intrinsic.h>	/* Include standard Toolkit Header file.
-				   We do no need "StringDefs.h" */
-
-#include <X11/Xaw/Label.h>	/* Include the Label widget's header file. */
-#include <X11/Xaw/Cardinals.h>	/* Definition of ZERO. */
+#include <examples.h>
 
 /*
  * These resources will only get loaded if there is no app-defaults
@@ -45,9 +39,8 @@
 
 String fallback_resources[] = { "*Label.Label:    Hello, World", NULL };
 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel;
@@ -65,7 +58,7 @@ char **argv;
      * from the resource database.
      */
 
-    (void) XtCreateManagedWidget("label", labelWidgetClass, toplevel, 
+    (void) XtCreateManagedWidget("label", labelWidgetClass, toplevel,
 				 NULL, ZERO);
 
     /*
@@ -78,6 +71,6 @@ char **argv;
     /*
      * Now process the events.
      */
-    
+
     XtAppMainLoop(app_con);
 }

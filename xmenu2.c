@@ -1,6 +1,6 @@
 /*
  * A more complicated Simple Menu Widget example.
- * 
+ *
  * November 30, 1989 - Chris D. Peterson
  */
 
@@ -23,28 +23,19 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 
-#include <stdio.h>
+#include <examples.h>
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
 #include <X11/bitmaps/xlogo16>
 
-#include <X11/Xaw/MenuButton.h>
-#include <X11/Xaw/SimpleMenu.h>
-#include <X11/Xaw/Sme.h>
-#include <X11/Xaw/SmeBSB.h>
-#include <X11/Xaw/SmeLine.h>
+static void MenuSelect CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
-#include <X11/Xaw/Cardinals.h>
-
-static void MenuSelect(), Syntax();
-
-String fallback_resources[] = { 
+String fallback_resources[] = {
 #ifdef COLOR_DISPLAY
     "*SimpleMenu*foreground:		SteelBlue",
     "*SimpleMenu*menuLabel.foreground:	Gold",
@@ -73,7 +64,7 @@ String fallback_resources[] = {
 #define NUM_MENU_ITEMS 12
 
 static char * menu_entry_names[] = {
-  "quit", 
+  "quit",
   "item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8",
   "menu1", "menu2", "menu3",
 };
@@ -81,10 +72,8 @@ static char * menu_entry_names[] = {
 static Boolean status[NUM_MENU_ITEMS];
 static Pixmap mark;
 
-void
-main(argc, argv)
-char ** argv;
-int argc;
+int
+main(int argc, char **argv)
 {
     Widget top, menu, button, entry;
     XtAppContext app_con;
@@ -92,37 +81,37 @@ int argc;
     top = XtAppInitialize(&app_con, "Xmenu2", NULL, ZERO,
 			  &argc, argv, fallback_resources,
 			  NULL, ZERO);
-    
-    if (argc != 1)		
+
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
-    
+
     button = XtCreateManagedWidget("menuButton", menuButtonWidgetClass, top,
 				   NULL, ZERO);
-    
-    menu = XtCreatePopupShell("menu", simpleMenuWidgetClass, button, 
+
+    menu = XtCreatePopupShell("menu", simpleMenuWidgetClass, button,
 			      NULL, ZERO);
-  
+
     for (i = 0; i < NUM_MENU_ITEMS ; i++) {
 	char * item = menu_entry_names[i];
-	
-	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu, 
+
+	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu,
 				      NULL, ZERO);
 	XtAddCallback(entry, XtNcallback, MenuSelect, (XtPointer) i);
 
-	/* 
-	 * Put a couple of line seperators in at the apropriate place. 
+	/*
+	 * Put a couple of line seperators in at the apropriate place.
 	 */
 
-	if (i == 4) 
+	if (i == 4)
 	    entry = XtCreateManagedWidget("line", smeLineObjectClass, menu,
 					  NULL, ZERO);
-	if (i == 8) 
+	if (i == 8)
 	    entry = XtCreateManagedWidget("blank", smeObjectClass, menu,
 					  NULL, ZERO);
     }
 
     /*
-     * Create the bitmap for marking selected items. 
+     * Create the bitmap for marking selected items.
      */
 
     mark = XCreateBitmapFromData(XtDisplay(top),
@@ -139,32 +128,30 @@ int argc;
  *	Arguments: w - the menu item that was selected.
  *                 number - the number of the menu item selected.
  *                 garbage - *** unused ***.
- *	Returns: 
+ *	Returns:
  */
 
 /* ARGSUSED */
 static void
-MenuSelect(w, number, garbage)
-Widget w;
-XtPointer number, garbage;
+MenuSelect(Widget w, XtPointer number, XtPointer garbage _X_UNUSED)
 {
     Arg arglist[1];
     Cardinal num_args = 0;
     int num = (int) number;
-    
+
     printf("Menu item `%s' has been selected.\n", XtName(w));
-    
+
     if (num == 0) {			/* quit selected. */
 	XtDestroyApplicationContext(XtWidgetToApplicationContext(w));
 	exit(0);
     }
-    if (status[num]) 
-	XtSetArg(arglist[num_args], XtNleftBitmap, None); 
-    else 
+    if (status[num])
+	XtSetArg(arglist[num_args], XtNleftBitmap, None);
+    else
 	XtSetArg(arglist[num_args], XtNleftBitmap, mark);
     num_args++;
     XtSetValues(w, arglist, num_args);
-    
+
     status[num] = !status[num];
 }
 
@@ -175,10 +162,8 @@ XtPointer number, garbage;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

@@ -4,7 +4,7 @@
  *
  * User events are handled through callback routines.
  *
- * November 27, 1989 - Chris D. Peterson 
+ * November 27, 1989 - Chris D. Peterson
  */
 
 /*
@@ -26,25 +26,16 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>	/* Get standard string definations. */
+#include <examples.h>
 
-#include <X11/Xaw/Command.h>	
-#include <X11/Xaw/Label.h>	
-#include <X11/Xaw/Box.h>	
-#include <X11/Xaw/Cardinals.h>	
+static void Syntax(XtAppContext, char *);
+static void Quit CALLBACK_ARGS;
 
-extern void exit();
-
-static void Syntax();
-static void Quit();
-
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*Command.Label:    Click the left mouse button here to quit",
     NULL,
 };
@@ -54,9 +45,8 @@ static XrmOptionDescRec options[] = {
     {"-vspace",	"*Box.vSpace",	XrmoptionSepArg,	NULL},
 };
 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     int i;
     XtAppContext app_con;
@@ -67,21 +57,21 @@ char **argv;
 			       &argc, argv, fallback_resources,
 			       NULL, ZERO);
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
-    /* 
+    /*
      * Create a Box widget and put all children in that box widget.
-     * 
+     *
      * Unlike the Shell widget a Box widget can accept more than one child.
      * By using boxes and other composites it is possible to create an
      * arbitrarily complex application with hundreds or event thousands of
      * widgets.
      */
-    
+
     box = XtCreateManagedWidget("box", boxWidgetClass, toplevel,
 				NULL, ZERO);
-    
+
     /*
      * Put a command widget in the box.
      */
@@ -90,13 +80,13 @@ char **argv;
 				    NULL, ZERO);
     XtAddCallback(command, XtNcallback, Quit, NULL);
 
-    /* 
+    /*
      * Put 10 Label widget children in the Box.
      */
 
     for (i = 1; i <= 10; i++) {
 	char buf[BUFSIZ];
-	
+
 	sprintf(buf, "labelWidgetName%d", i * i * i * i);
 	command = XtCreateManagedWidget(buf, labelWidgetClass, box,
 					NULL, ZERO);
@@ -115,9 +105,10 @@ char **argv;
  */
 
 static void
-Quit(w, client_data, call_data)
-Widget w;
-XtPointer client_data, call_data;
+Quit(
+	Widget w,
+	XtPointer client_data _X_UNUSED,
+	XtPointer call_data _X_UNUSED)
 {
     XtDestroyApplicationContext(XtWidgetToApplicationContext(w));
     exit(0);
@@ -130,10 +121,8 @@ XtPointer client_data, call_data;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [ -vspace <value> ] [ -hspace <value> ]\n",

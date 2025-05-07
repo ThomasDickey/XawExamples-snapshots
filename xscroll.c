@@ -7,7 +7,7 @@
  *
  * User events handled through callback routines.
  *
- * November 14, 1989 - Chris D. Peterson 
+ * November 14, 1989 - Chris D. Peterson
  */
 
 /*
@@ -29,29 +29,22 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
+#include <examples.h>
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-
-#include <X11/Xaw/Scrollbar.h>
-#include <X11/Xaw/Cardinals.h>	
-
-static void Scrolled(), Jumped();
-static void Syntax();
+static void Scrolled CALLBACK_ARGS;
+static void Jumped CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
 static XrmOptionDescRec options[] = {
 {"-horiz",	"scrollbar.orientation", XrmoptionNoArg,  "horizontal"}
 };
 
-void
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel, scrollbar;
@@ -63,10 +56,10 @@ char **argv;
     toplevel = XtAppInitialize(&app_con, "Xscroll", options, XtNumber(options),
 			       &argc, argv, NULL, NULL, ZERO);
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
-    
+
     /*
      * Setting a float resource in an argument list.
      */
@@ -75,7 +68,7 @@ char **argv;
     num_args = 0;
     if (sizeof(float) > sizeof(XtArgVal)) {
 	/*
-	 * If a float is larger than an XtArgVal then pass this 
+	 * If a float is larger than an XtArgVal then pass this
 	 * resource value by reference.
 	 */
 	XtSetArg(args[num_args], XtNtopOfThumb, &top); num_args++;
@@ -83,7 +76,7 @@ char **argv;
     else {
 	/*
 	 * Convince C not to perform an automatic conversion, which
-	 * would truncate 0.5 to 0. 
+	 * would truncate 0.5 to 0.
 	 */
 	l_top = (XtArgVal *) &top;
 	XtSetArg(args[num_args], XtNtopOfThumb, *l_top); num_args++;
@@ -120,9 +113,10 @@ char **argv;
 
 /* ARGSUSED */
 static void
-Scrolled(w, closure, call_data)
-Widget w;
-XtPointer closure, call_data;
+Scrolled(
+	Widget w _X_UNUSED,
+	XtPointer closure _X_UNUSED,
+	XtPointer call_data)
 {
     fprintf(stdout,
 	   "scrolled by %d pixels.\n", (int) call_data );
@@ -132,16 +126,17 @@ XtPointer closure, call_data;
  *	Description: This function prints a message to stdout.
  *	Arguments: w - ** UNUSED **
  *                 client_data - ** UNUSED **
- *                 call_data - a pointer to a float containing 
+ *                 call_data - a pointer to a float containing
  *                               the location selected.
- *	Returns: none 
+ *	Returns: none
  */
 
 /* ARGSUSED */
 static void
-Jumped(w, closure, call_data)
-Widget w;
-XtPointer closure, call_data;
+Jumped(
+	Widget w _X_UNUSED,
+	XtPointer closure _X_UNUSED,
+	XtPointer call_data)
 {
     float top = *((float *) call_data);
 
@@ -156,10 +151,8 @@ XtPointer closure, call_data;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-horiz]\n", call);

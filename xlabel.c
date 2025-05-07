@@ -1,7 +1,7 @@
 /*
  * This an example of how to use the Label widget.
  *
- * November 14, 1989 - Chris D. Peterson 
+ * November 14, 1989 - Chris D. Peterson
  */
 
 /*
@@ -23,39 +23,33 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
+#include <examples.h>
 
-#include <X11/Intrinsic.h>	
-
-#include <X11/Xaw/Label.h>	
-#include <X11/Xaw/Cardinals.h>	
-
-static void Syntax();
+static void Syntax(XtAppContext, char *);
 
 String fallback_resources[] = { "*Label.Label:    This is xlabel", NULL };
 
 /* This is an example of a command line option table.
- * 
+ *
  * "-label"          - The command line option to look for.
  * "*Label.label"    - The resource to which the value will be assigned.
  *                     application name is automatically prepended to this
  *                     string.
- * XrmoptionSepArg   - The next arguemnt will be the value for 
+ * XrmoptionSepArg   - The next arguemnt will be the value for
  *                     the *Label.label resource.
  * NULL              - UNUSED.
  */
- 
+
 static XrmOptionDescRec options[] = {
 {"-label",	"*Label.label",	XrmoptionSepArg,	NULL}
 };
 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel;
@@ -69,11 +63,11 @@ char **argv;
      * report an error and exit.
      */
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
 
-    (void) XtCreateManagedWidget("label", labelWidgetClass, toplevel, 
+    (void) XtCreateManagedWidget("label", labelWidgetClass, toplevel,
 				 NULL, ZERO);
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app_con);
@@ -86,10 +80,8 @@ char **argv;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

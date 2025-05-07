@@ -3,7 +3,7 @@
  *
  * This an example of how to use the Text and Paned widgets.
  *
- * November 14, 1989 - Chris D. Peterson 
+ * November 14, 1989 - Chris D. Peterson
  */
 
 /*
@@ -25,27 +25,20 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
+#include <examples.h>
 
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Paned.h>
+static void ClearText CALLBACK_ARGS;
+static void PrintText CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
-#include <X11/Xaw/Cardinals.h>
-
-static void ClearText(), PrintText(), Syntax();
-static void Syntax();
-
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*input:				True",
     "*showGrip:				off",
-    "?.?.text.preferredPaneSize:	200", 
+    "?.?.text.preferredPaneSize:	200",
     "?.?.text.textSource.editType:	edit",
     "?.?.text.scrollVertical:		whenNeeded",
     "?.?.text.scrollHorizontal:		whenNeeded",
@@ -54,10 +47,9 @@ String fallback_resources[] = {
     "*print*label:            Click here to print the text to `stdout'.",
     NULL,
 };
- 
-main(argc, argv)
-int argc;
-char **argv;
+
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel, paned, clear, print, text;
@@ -72,22 +64,22 @@ char **argv;
      * report an error and exit.
      */
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
-    paned = XtCreateManagedWidget("paned", panedWidgetClass, toplevel, 
+    paned = XtCreateManagedWidget("paned", panedWidgetClass, toplevel,
 				  NULL, ZERO);
 
-    clear = XtCreateManagedWidget("clear", commandWidgetClass, paned, 
+    clear = XtCreateManagedWidget("clear", commandWidgetClass, paned,
 				  NULL, ZERO);
 
-    print = XtCreateManagedWidget("print", commandWidgetClass, paned, 
+    print = XtCreateManagedWidget("print", commandWidgetClass, paned,
 				  NULL, ZERO);
 
-    XtSetArg(args[0], XtNstring, 
+    XtSetArg(args[0], XtNstring,
 	     "This is a\ntest.  If this\nhad been an actual\nemergency...");
 
-    text = XtCreateManagedWidget("text", asciiTextWidgetClass, paned, 
+    text = XtCreateManagedWidget("text", asciiTextWidgetClass, paned,
 				 args, ONE);
 
     XtAddCallback(clear, XtNcallback, ClearText, (XtPointer) text);
@@ -107,9 +99,10 @@ char **argv;
 
 /* ARGSUSED */
 static void
-ClearText(w, text_ptr, call_data)
-Widget w;
-XtPointer text_ptr, call_data;
+ClearText(
+	Widget w _X_UNUSED,
+	XtPointer text_ptr,
+	XtPointer call_data _X_UNUSED)
 {
     Widget text = (Widget) text_ptr;
     Arg args[1];
@@ -128,9 +121,10 @@ XtPointer text_ptr, call_data;
 
 /* ARGSUSED */
 static void
-PrintText(w, text_ptr, call_data)
-Widget w;
-XtPointer text_ptr, call_data;
+PrintText(
+	Widget w _X_UNUSED,
+	XtPointer text_ptr,
+	XtPointer call_data _X_UNUSED)
 {
     Widget text = (Widget) text_ptr;
     Arg args[1];
@@ -149,10 +143,8 @@ XtPointer text_ptr, call_data;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s \n", call);

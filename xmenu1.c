@@ -1,6 +1,6 @@
 /*
  * A simple Simple Menu Widget example.
- * 
+ *
  * November 30, 1989 - Chris D. Peterson
  */
 
@@ -23,27 +23,18 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-
-#include <X11/Xaw/MenuButton.h>
-#include <X11/Xaw/SimpleMenu.h>
-#include <X11/Xaw/Sme.h>
-#include <X11/Xaw/SmeBSB.h>
-
-#include <X11/Xaw/Cardinals.h>
+#include <examples.h>
 
 #define streq(a, b)        ( strcmp((a), (b)) == 0 )
 
-static void MenuSelect(), Syntax();
+static void MenuSelect CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
-String fallback_resources[] = { 
+String fallback_resources[] = {
 #ifdef COLOR_DISPLAY
     /* For Color workstations. */
     "*menu.menuLabel.foreground:    Blue",
@@ -60,15 +51,13 @@ String fallback_resources[] = {
     NULL,
 };
 
-void
-main(argc, argv)
-char ** argv;
-int argc;
+int
+main(int argc, char **argv)
 {
     Widget top, command, menu, entry;
     XtAppContext app_con;
     int i;
-    
+
     static char * menu_item_names[] = {
 	"quit",	"item1", "item2", "item3", "item4",
     };
@@ -76,23 +65,23 @@ int argc;
     top = XtAppInitialize(&app_con, "Xmenu1", NULL, ZERO,
 			  &argc, argv, fallback_resources,
 			  NULL, ZERO);
-    
-    if (argc != 1)		
+
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     command = XtCreateManagedWidget("menuButton", menuButtonWidgetClass, top,
 				    NULL, ZERO);
-    
-    menu = XtCreatePopupShell("menu", simpleMenuWidgetClass, command, 
+
+    menu = XtCreatePopupShell("menu", simpleMenuWidgetClass, command,
 			      NULL, ZERO);
-    
+
     for (i = 0; i < (int) XtNumber(menu_item_names) ; i++) {
 	char * item = menu_item_names[i];
-	
+
 	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu,
 				      NULL, ZERO);
 	XtAddCallback(entry, XtNcallback, MenuSelect, NULL);
-	
+
 	/*
 	 * Create an extra blank entry after the third menu entry.
 	 */
@@ -101,7 +90,7 @@ int argc;
 	    entry = XtCreateWidget("blank", smeObjectClass, menu,
 				   NULL, ZERO);
     }
-    
+
     XtRealizeWidget(top);
     XtAppMainLoop(app_con);
 }
@@ -110,14 +99,15 @@ int argc;
  *	Description: called whenever a menu item is selected.
  *	Arguments: w - the menu item that was selected.
  *                 junk, garbage - *** unused ***.
- *	Returns: 
+ *	Returns:
  */
 
 /* ARGSUSED */
 static void
-MenuSelect(w, junk, garbage)
-Widget w;
-XtPointer junk, garbage;
+MenuSelect(
+	Widget w,
+	XtPointer junk _X_UNUSED,
+	XtPointer garbage _X_UNUSED)
 {
     printf("Menu item `%s' has been selected.\n", XtName(w));
     if (streq(XtName(w), "quit")) {
@@ -133,10 +123,8 @@ XtPointer junk, garbage;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

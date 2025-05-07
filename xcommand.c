@@ -3,7 +3,7 @@
  *
  * User events handled through callback routines.
  *
- * November 14, 1989 - Chris D. Peterson 
+ * November 14, 1989 - Chris D. Peterson
  */
 
 /*
@@ -25,21 +25,16 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>	/* Get standard string definations. */
+#include <examples.h>
 
-#include <X11/Xaw/Command.h>	
-#include <X11/Xaw/Cardinals.h>	
+static void Select CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
-static void Syntax();
-static void Select();
-
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*Command.Label:    Click the left mouse button here",
     NULL,
 };
@@ -48,9 +43,8 @@ static XrmOptionDescRec options[] = {
 {"-label",	"*Command.label",	XrmoptionSepArg,	NULL}
 };
 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel, command;
@@ -60,7 +54,7 @@ char **argv;
 			       &argc, argv, fallback_resources,
 			       NULL, ZERO);
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     command = XtCreateManagedWidget("command", commandWidgetClass, toplevel,
@@ -86,9 +80,7 @@ char **argv;
  */
 
 static void
-Select(w, client_data, call_data)
-Widget w;
-XtPointer call_data, client_data;
+Select(Widget w _X_UNUSED, XtPointer call_data _X_UNUSED, XtPointer client_data _X_UNUSED)
 {
     fprintf(stdout, "Button Selected.\n");
 }
@@ -100,10 +92,8 @@ XtPointer call_data, client_data;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

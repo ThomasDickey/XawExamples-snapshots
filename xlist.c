@@ -1,6 +1,6 @@
 /*
  * This example demostrates how to use the Athena List widget.
- * 
+ *
  * November 30, 1989 - Chris D. Peterson
  */
 
@@ -23,25 +23,17 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
+#include <examples.h>
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
+static void Activate CALLBACK_ARGS;
+static void Syntax(XtAppContext, char *);
 
-#include <X11/Xaw/List.h>
-
-#include <X11/Xaw/Cardinals.h>
-
-static void Activate(), Syntax();
-
-void 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     Widget toplevel, list;
     XtAppContext app_con;
@@ -56,13 +48,13 @@ char **argv;
 
     toplevel = XtAppInitialize(&app_con, "Xlist", NULL, ZERO,
 			       &argc, argv, NULL, NULL, ZERO);
-    if (argc != 1) 
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     XtSetArg(args[0], XtNlist, items);
     list= XtCreateManagedWidget( "list", listWidgetClass, toplevel, args, ONE);
     XtAddCallback(list, XtNcallback, Activate, (XtPointer)NULL);
-    
+
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app_con);
 }
@@ -74,10 +66,8 @@ char **argv;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s\n", call);
@@ -88,14 +78,15 @@ char *call;
  *	Description: Called when a list item has been selected.
  *	Arguments: w, closure - *** UNUSED ***.
  *                 call_data - a pointer to the list info structure.
- *	Returns: 
+ *	Returns:
  */
 
 /* ARGSUSED */
-static void 
-Activate(w, closure, call_data)
-Widget w;
-XtPointer closure, call_data;
+static void
+Activate(
+	Widget w _X_UNUSED,
+	XtPointer closure _X_UNUSED,
+	XtPointer call_data)
 {
     XawListReturnStruct *item = (XawListReturnStruct*)call_data;
     printf( "selected item %d; \"%s\"\n", item->list_index, item->string );

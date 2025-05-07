@@ -1,0 +1,97 @@
+dnl $XTermId: configure.in,v 1.1 2025/05/05 08:12:56 tom Exp $
+dnl -----------------------------------------------------------------------------
+dnl this file is part of xterm
+dnl
+dnl Copyright 2025 by Thomas E. Dickey
+dnl
+dnl                         All Rights Reserved
+dnl
+dnl Permission is hereby granted, free of charge, to any person obtaining a
+dnl copy of this software and associated documentation files (the
+dnl "Software"), to deal in the Software without restriction, including
+dnl without limitation the rights to use, copy, modify, merge, publish,
+dnl distribute, sublicense, and/or sell copies of the Software, and to
+dnl permit persons to whom the Software is furnished to do so, subject to
+dnl the following conditions:
+dnl
+dnl The above copyright notice and this permission notice shall be included
+dnl in all copies or substantial portions of the Software.
+dnl
+dnl THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+dnl OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+dnl MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+dnl IN NO EVENT SHALL THE ABOVE LISTED COPYRIGHT HOLDER(S) BE LIABLE FOR ANY
+dnl CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+dnl TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+dnl SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+dnl
+dnl Except as contained in this notice, the name(s) of the above copyright
+dnl holders shall not be used in advertising or otherwise to promote the
+dnl sale, use or other dealings in this Software without prior written
+dnl authorization.
+dnl ---------------------------------------------------------------------------
+dnl Process this file with autoconf to produce a configure script.
+dnl
+AC_PREREQ(2.52.20210509)
+AC_INIT
+AC_CONFIG_SRCDIR([xwidgets.c])
+AC_CONFIG_HEADER(config.h:config_h.in)
+CF_CHECK_CACHE
+
+###	checks for alternative programs
+
+CF_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+CF_PROG_LINT
+
+###	checks for compiler characteristics
+CF_XOPEN_SOURCE(700)
+
+###	checks for header files
+AC_CHECK_DECL(exit)
+
+###	checks for typedefs
+
+###	checks for library functions
+
+CF_HELP_MESSAGE(Compile/Install Options:)
+
+###	checks for system services and user specified options
+
+AC_PATH_XTRA
+CF_X_TOOLKIT
+CF_WITH_XPM
+CF_X_ATHENA
+
+LIBS="$LIBS $X_EXTRA_LIBS"
+
+CF_WITH_IMAKE_CFLAGS($(MAIN_DEFINES) $(VENDORMANDEFS))
+
+###############################################################################
+CF_HELP_MESSAGE(Testing/development Options:)
+
+AC_MSG_CHECKING(if you want debugging traces)
+CF_ARG_ENABLE(trace,
+	[  --enable-trace          test: set to enable debugging traces],
+	[enable_trace=yes],
+	[enable_trace=no])
+AC_MSG_RESULT($enable_trace)
+if test "$enable_trace" = yes ; then
+	AC_DEFINE(OPT_TRACE,1,[Define to 1 to enable debugging traces])
+	EXTRASRCS="$EXTRASRCS trace.c"
+	EXTRAOBJS="$EXTRAOBJS trace.o"
+fi
+
+CF_DISABLE_LEAKS
+CF_DISABLE_ECHO
+
+CF_ENABLE_WARNINGS(Wdeclaration-after-statement Wextra Wno-unknown-pragmas Wswitch-enum Wno-cast-qual,yes)
+
+AC_SUBST(EXTRA_CFLAGS)
+AC_SUBST(EXTRAHDRS)
+AC_SUBST(EXTRASRCS)
+AC_SUBST(EXTRAOBJS)
+
+###	output config.h, etc
+AC_OUTPUT([Makefile],,,cat)

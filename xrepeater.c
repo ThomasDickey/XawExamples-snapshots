@@ -21,20 +21,15 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>	/* Get standard string definations. */
-
-#include <X11/Xaw/Repeater.h>
-#include <X11/Xaw/Cardinals.h>	
+#include <examples.h>
 
 char *ProgramName;
 
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*Repeater.Label:    Press Me",
     NULL,
 };
@@ -59,8 +54,7 @@ static char *helpmsg[] = {
     "-minimum number            minimum repeat delay in milliseconds",
 NULL };
 
-static void usage (app_con)
-    XtAppContext app_con;
+static void usage (XtAppContext app_con)
 {
     char **msg;
 
@@ -83,31 +77,33 @@ static void usage (app_con)
 
 static int count = 0;
 
-static void Select (w, client_data, call_data)
-    Widget w;
-    XtPointer call_data, client_data;
+static void Select (
+    Widget w _X_UNUSED,
+    XtPointer call_data _X_UNUSED,
+    XtPointer client_data _X_UNUSED)
 {
     printf ("Press #%d\n", ++count);
 }
 
-static void Start (w, client_data, call_data)
-    Widget w;
-    XtPointer call_data, client_data;
+static void Start (
+    Widget w _X_UNUSED,
+    XtPointer call_data _X_UNUSED,
+    XtPointer client_data _X_UNUSED)
 {
     printf ("Starting...\n");
     count = 0;
 }
 
-static void Stop (w, client_data, call_data)
-    Widget w;
-    XtPointer call_data, client_data;
+static void Stop (
+    Widget w _X_UNUSED,
+    XtPointer call_data _X_UNUSED,
+    XtPointer client_data _X_UNUSED)
 {
     printf ("...Stopping\n");
 }
 
-main (argc, argv)
-    int argc;
-    char **argv;
+int
+main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel, repeater;

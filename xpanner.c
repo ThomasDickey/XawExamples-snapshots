@@ -17,17 +17,13 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Author:  Jim Fulton, MIT X Consortium
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/Cardinals.h>
-#include <X11/Xaw/Panner.h>
+#include <examples.h>
 
 char *ProgramName;
 
@@ -48,7 +44,7 @@ static XrmOptionDescRec options[] = {
     { "-bs", "*backgroundStipple", XrmoptionSepArg, NULL },
 };
 
-static void usage ()
+static void usage (void)
 {
     fprintf (stderr, "usage:  %s [-options ...]\n", ProgramName);
     fprintf (stderr, "where options include:\n");
@@ -61,21 +57,17 @@ static void usage ()
     exit (1);
 }
 
-static void report (w, closure, data)
-    Widget w;
-    XtPointer closure;
-    XtPointer data;
+static void report (Widget w _X_UNUSED, XtPointer closure _X_UNUSED, XtPointer data)
 {
     XawPannerReport *rep = (XawPannerReport *) data;
-    printf ("slider %dx%d+%d+%d in canvas %dx%d\n", 
+    printf ("slider %dx%d+%d+%d in canvas %dx%d\n",
 	    rep->slider_width, rep->slider_height,
-	    rep->slider_x, rep->slider_y, 
+	    rep->slider_x, rep->slider_y,
 	    rep->canvas_width, rep->canvas_height);
 }
 
-main (argc, argv)
-    int argc;
-    char **argv;
+int
+main(int argc, char **argv)
 {
     Widget toplevel;
     XtAppContext app;

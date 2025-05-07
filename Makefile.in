@@ -1,0 +1,123 @@
+## $XTermId: Makefile.in,v 1.1 2025/05/07 00:09:27 tom Exp $
+# -----------------------------------------------------------------------------
+# Copyright 2025 by Thomas E. Dickey
+#
+#                         All Rights Reserved
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE ABOVE LISTED COPYRIGHT HOLDER(S) BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name(s) of the above copyright
+# holders shall not be used in advertising or otherwise to promote the
+# sale, use or other dealings in this Software without prior written
+# authorization.
+# -----------------------------------------------------------------------------
+
+SHELL		= /bin/sh
+
+#### Start of system configuration section. ####
+
+srcdir		= @srcdir@
+VPATH  		= @srcdir@
+
+x		= @EXEEXT@
+o		= .@OBJEXT@
+
+CC		= @CC@
+CPP		= @CPP@
+LINK		= $(CC) $(CFLAGS)
+
+RM              = rm -f
+LINT		= @LINT@
+LINT_OPTS	= @LINT_OPTS@
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM	= @INSTALL_PROGRAM@
+
+EXTRA_CFLAGS	= @EXTRA_CFLAGS@
+EXTRA_CPPFLAGS	= @EXTRA_CPPFLAGS@
+EXTRA_LOADFLAGS	= @IMAKE_LOADFLAGS@
+
+CPPFLAGS	= -I. -I$(srcdir) -DHAVE_CONFIG_H @CPPFLAGS@ $(EXTRA_CPPFLAGS)
+CFLAGS		= @CFLAGS@ $(EXTRA_CFLAGS)
+LDFLAGS		= @LDFLAGS@
+LIBS		= @LIBS@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+datarootdir	= @datarootdir@
+datadir		= @datadir@
+
+manext		= 1
+bindir		= @bindir@
+libdir		= @libdir@
+mandir		= @mandir@/man$(manext)
+
+BINDIR		= $(DESTDIR)$(bindir)
+
+#### End of system configuration section. ####
+
+C_SOURCE = \
+	popup.c \
+	xboxes.c \
+	xbuttonbox.c \
+	xcommand.c \
+	xcommand2.c \
+	xhw.c \
+	xlabel.c \
+	xlist.c \
+	xmenu1.c \
+	xmenu2.c \
+	xpanner.c \
+	xrepeater.c \
+	xscroll.c \
+	xtext.c \
+	xwidgets.c
+
+
+PROGRAMS = $(C_SOURCE:.c=)
+
+.c:
+	@ECHO_LD@ $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LDFLAGS) $(EXTRA_LOADFLAGS) $(LIBS)
+
+all: $(PROGRAMS)
+
+install: $(PROGRAMS)
+	@mkdir -p $(BINDIR)
+	@sh -c "for p in $(PROGRAMS); \
+		do \
+			echo \"** installing \$$p\"; \
+			$(INSTALL_PROGRAM) \$$p $(BINDIR)/\$$p; \
+		done"
+
+uninstall:
+	@sh -c "for p in $(PROGRAMS); \
+		do \
+			echo \"** uninstalling \$$p\"; \
+			rm -f $(BINDIR)/\$$p; \
+		done"
+
+clean:
+	rm -f $(PROGRAMS)
+
+distclean: clean
+	rm -f Makefile config.h config.log config.status
+
+lint:	$(C_SOURCE)
+	$(LINT) $LINT_OPTS) $(C_SOURCE)

@@ -5,7 +5,7 @@
  *
  * Application resources are also introduced.
  *
- * November 27, 1989 - Chris D. Peterson 
+ * November 27, 1989 - Chris D. Peterson
  */
 
 /*
@@ -27,22 +27,15 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>	/* Get standard string definations. */
+#include <examples.h>
 
-#include <X11/Xaw/Box.h>	
-#include <X11/Xaw/Command.h>	
-#include <X11/Xaw/Label.h>	
-#include <X11/Xaw/Viewport.h>	
-#include <X11/Xaw/Cardinals.h>	
-
-static void Syntax(), MakeBox();
-static void Quit();
+static void Syntax(XtAppContext, char *);
+static void MakeBox(Widget, char *);
+static void Quit CALLBACK_ARGS;
 
 /*
  * All application resources must reside in a structure, the structure
@@ -72,7 +65,7 @@ static XtResource resources[] = {
      XtOffsetOf(AppResources, num_boxes), XtRImmediate, (XtPointer) 3},
 };
 
-String fallback_resources[] = { 
+String fallback_resources[] = {
     "*Command.Label:    Click the left mouse button here to quit",
     "*Viewport*allowVert: True",
     "*Viewport*allowHoriz: True",
@@ -87,9 +80,8 @@ static XrmOptionDescRec options[] = {
     {"-numboxes", "numBoxes",   XrmoptionSepArg,        NULL},
 };
 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     int i;
     XtAppContext app_con;
@@ -101,7 +93,7 @@ char **argv;
 			       &argc, argv, fallback_resources,
 			       NULL, ZERO);
 
-    if (argc != 1)		
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     /*
@@ -114,7 +106,7 @@ char **argv;
 
     /*
      * Here we use the app_resources "scroll" to determine whether or not
-     * to insert a viewport widget between the outer Box and the Shell.  This 
+     * to insert a viewport widget between the outer Box and the Shell.  This
      * would allow scrolling of the outer Box.
      */
 
@@ -131,15 +123,15 @@ char **argv;
 				    NULL, ZERO);
     XtAddCallback(command, XtNcallback, Quit, NULL);
 
-    /* 
+    /*
      * Put a bunch of smaller boxes in the outer box.
      */
 
     for (i = 1; i <= app_resources.num_boxes; i++) {
 	char name[BUFSIZ];
-	
+
 	sprintf(name, "aLongBoxName%d", i * i * i * i);
-	MakeBox(box, (String) name);
+	MakeBox(box, name);
     }
 
     XtRealizeWidget(toplevel);
@@ -154,13 +146,11 @@ char **argv;
  */
 
 static void
-MakeBox(parent, name)
-Widget parent;
-String name;
+MakeBox(Widget parent, char * name)
 {
     Widget box;
     int i;
-    
+
     box = XtCreateManagedWidget(name, boxWidgetClass, parent, NULL, ZERO);
 
     (void) XtCreateManagedWidget(name, labelWidgetClass, box, NULL, ZERO);
@@ -178,12 +168,11 @@ String name;
  */
 
 static void
-Quit(w, client_data, call_data)
-Widget w;
-XtPointer client_data, call_data;
+Quit(
+	Widget w,
+	XtPointer client_data _X_UNUSED,
+	XtPointer call_data _X_UNUSED)
 {
-    void exit();
-
     XtDestroyApplicationContext(XtWidgetToApplicationContext(w));
     exit(0);
 }
@@ -195,10 +184,8 @@ XtPointer client_data, call_data;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s\n", call);

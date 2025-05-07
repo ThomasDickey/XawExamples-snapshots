@@ -24,27 +24,19 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>			/* For the Syntax message */
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
+#include <examples.h>
 
-#include <X11/Xaw/Box.h>
-#include <X11/Xaw/Cardinals.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Dialog.h>
-
-static void PopupPrompt();	/* the callback of the main demo button */
-static void Quit();		/* the callback of the main quit button */
-static void ColorTheButton();	/* the callback of the popup ok button */
-static void DestroyPopupPrompt(); /* the callback of the popup cancel button */
-static void Ok();		/* an action proc calling ColorTheButton */
-static void Syntax();		/* report syntax errors and exit. */
-static int ConvertColor();	/* Converts a color name into a pixel value. */
+static void PopupPrompt CALLBACK_ARGS;	/* main demo button */
+static void Quit CALLBACK_ARGS;		/* main quit button */
+static void ColorTheButton CALLBACK_ARGS;	/* popup ok button */
+static void DestroyPopupPrompt CALLBACK_ARGS;	/* popup cancel button */
+static void Ok ACTIONS_ARGS;		/* calling ColorTheButton */
+static void Syntax(XtAppContext, char *); /* report syntax errors and exit. */
+static int ConvertColor(Widget, char *); /* Convert color name to pixel value */
 
 static String fallback_resources[] = {
     "*input: True",
@@ -61,10 +53,8 @@ XtActionsRec actionTable[] = {
     {"Ok",	Ok}
 };
 
-void 
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     Widget	toplevel, button, box;
     XtAppContext app_con;
@@ -73,7 +63,7 @@ char **argv;
 			       &argc, argv, fallback_resources,
 			       NULL, ZERO);
 
-    if (argc != 1) 
+    if (argc != 1)
 	Syntax(app_con, argv[0]);
 
     XtAppAddActions(app_con, actionTable, XtNumber(actionTable));
@@ -101,10 +91,8 @@ char **argv;
  */
 
 /*ARGSUSED*/
-static void 
-PopupPrompt(button, client_data, call_data)
-Widget	button;		
-XtPointer client_data, call_data;
+static void
+PopupPrompt(Widget button, XtPointer client_data _X_UNUSED, XtPointer call_data _X_UNUSED)
 {
     Arg		args[5];
     Widget	popup, dialog;
@@ -133,14 +121,14 @@ XtPointer client_data, call_data;
     popup = XtCreatePopupShell("prompt", transientShellWidgetClass, button,
 			       args, n);
 
-    /* 
-     * The popup will contain a dialog box, prompting the user for input. 
+    /*
+     * The popup will contain a dialog box, prompting the user for input.
      */
 
     dialog = XtCreateManagedWidget("dialog", dialogWidgetClass, popup,NULL, 0);
 
     /*
-     * The prompting message's size is dynamic; allow it to request resize. 
+     * The prompting message's size is dynamic; allow it to request resize.
      */
 
     XawDialogAddButton(dialog, "ok", ColorTheButton, (XtPointer) dialog);
@@ -160,7 +148,7 @@ XtPointer client_data, call_data;
      * The dialog popup will allow user input to the rest of the application
      * when the grab kind is GrabNone.   Since I allow input to the rest of
      * the application and since I don't destroy the popup before creating a
-     * new one, I am allowing multiple identical popups, one for each time 
+     * new one, I am allowing multiple identical popups, one for each time
      * the user clicks on the main application button.
      *
      * Try it with XtGrabExclusive instead of XtGrabNone.  Will the user
@@ -178,10 +166,11 @@ XtPointer client_data, call_data;
  */
 
 /*ARGSUSED*/
-static void 
-Quit(widget, client_data, call_data)
-Widget	widget;		
-XtPointer client_data, call_data;
+static void
+Quit(
+	Widget widget,
+	XtPointer client_data _X_UNUSED,
+	XtPointer call_data _X_UNUSED)
 {
     XtDestroyApplicationContext(XtWidgetToApplicationContext(widget));
     exit(0);
@@ -197,15 +186,16 @@ XtPointer client_data, call_data;
  */
 
 /*ARGSUSED*/
-static void 
-ColorTheButton(w, client_data, call_data)
-Widget	w;		
-XtPointer client_data, call_data;	
+static void
+ColorTheButton(
+	Widget w _X_UNUSED,
+	XtPointer client_data,
+	XtPointer call_data _X_UNUSED)
 {
     Widget dialog = (Widget) client_data;
-    Widget button  = XtParent(XtParent(dialog)); 
+    Widget button  = XtParent(XtParent(dialog));
     int pixel;
-    String cname = XawDialogGetValueString(dialog);
+    char * cname = XawDialogGetValueString(dialog);
     Arg	args[3];
 
     pixel = ConvertColor(button, cname);
@@ -218,7 +208,7 @@ XtPointer client_data, call_data;
     else {			/* pixel < 0  ==> error. */
 	char str[BUFSIZ];
 	(void) sprintf(str, "Can't get color \"%s\".  Try again.",  cname);
-	   
+
 	XtSetArg(args[0], XtNlabel, str);
 	XtSetArg(args[1], XtNvalue, "");
 	XtSetValues(dialog, args, TWO);
@@ -235,17 +225,18 @@ XtPointer client_data, call_data;
  */
 
 /*ARGSUSED*/
-static void 
-DestroyPopupPrompt(widget, client_data, call_data)
-Widget	widget;		
-XtPointer client_data, call_data;	
+static void
+DestroyPopupPrompt
+	(Widget widget _X_UNUSED,
+	XtPointer client_data,
+	XtPointer call_data _X_UNUSED)
 {
     Widget popup = XtParent( (Widget) client_data);
     XtDestroyWidget(popup);
 }
 
 /*	Function Name: Ok
- *	Description: An action routine that is invoked from any child of 
+ *	Description: An action routine that is invoked from any child of
  *                   the dialog widget.  This routine will also color the
  *                   command button that activated the popup.
  *	Arguments: widget - the child of the dialog that caused this action.
@@ -254,12 +245,12 @@ XtPointer client_data, call_data;
  */
 
 /*ARGSUSED*/
-static void 
-Ok(widget, event, params, num_params)
-Widget widget;		
-XEvent *event;		
-String *params;	
-Cardinal *num_params;
+static void
+Ok(
+	Widget widget,
+	XEvent *event _X_UNUSED,
+	String *params _X_UNUSED,
+	Cardinal *num_params _X_UNUSED)
 {
     Widget dialog = XtParent(widget);
 
@@ -273,18 +264,16 @@ Cardinal *num_params;
  */
 
 static int
-ConvertColor(w, color_name)
-Widget w;
-char * color_name;
+ConvertColor(Widget w, char * color_name)
 {
   XrmValue from, to;
 
-  from.size = strlen(color_name) + 1;  
+  from.size = strlen(color_name) + 1;
   from.addr = color_name;
 
 /*
- * This conversion accepts a colorname from rgb.txt, or a #rrrgggbbb 
- * rgb color definition, or the special toolkit strings "XtDefaultForeground" 
+ * This conversion accepts a colorname from rgb.txt, or a #rrrgggbbb
+ * rgb color definition, or the special toolkit strings "XtDefaultForeground"
  * and "XtDefaultBackground".
  */
 
@@ -303,10 +292,8 @@ char * color_name;
  *	Returns: none - exits tho.
  */
 
-static void 
-Syntax(app_con, call)
-XtAppContext app_con;
-char *call;
+static void
+Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf(stderr, "Usage: %s\n", call);
