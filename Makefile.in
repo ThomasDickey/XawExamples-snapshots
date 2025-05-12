@@ -1,4 +1,4 @@
-## $XTermId: Makefile.in,v 1.1 2025/05/07 00:09:27 tom Exp $
+## $XTermId: Makefile.in,v 1.2 2025/05/12 09:19:41 tom Exp $
 # -----------------------------------------------------------------------------
 # Copyright 2025 by Thomas E. Dickey
 #
@@ -97,6 +97,13 @@ PROGRAMS = $(C_SOURCE:.c=)
 	@ECHO_LD@ $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LDFLAGS) $(EXTRA_LOADFLAGS) $(LIBS)
 
 all: $(PROGRAMS)
+
+check: $(PROGRAMS)
+	@sh -c "for p in $(PROGRAMS); \
+		do \
+			echo \"** running \$$p\"; \
+			./\$$p; \
+		done"
 
 install: $(PROGRAMS)
 	@mkdir -p $(BINDIR)

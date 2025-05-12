@@ -1,3 +1,7 @@
+2025-05-12  Thomas E. Dickey  <dickey@invisible-island.net>
+
+	* Makefile.in: add a "check" rule to run each program
+
 2025-05-06  Thomas E. Dickey  <dickey@invisible-island.net>
 
 	* examples.h: add variant's #includes
