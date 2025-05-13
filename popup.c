@@ -268,7 +268,7 @@ ConvertColor(Widget w, char * color_name)
 {
   XrmValue from, to;
 
-  from.size = strlen(color_name) + 1;
+  from.size = (unsigned) strlen(color_name) + 1;
   from.addr = color_name;
 
 /*

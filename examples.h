@@ -33,6 +33,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>

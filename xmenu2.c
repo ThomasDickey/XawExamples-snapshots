@@ -96,7 +96,7 @@ main(int argc, char **argv)
 
 	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu,
 				      NULL, ZERO);
-	XtAddCallback(entry, XtNcallback, MenuSelect, (XtPointer) i);
+	XtAddCallback(entry, XtNcallback, MenuSelect, (XtPointer) (intptr_t) i);
 
 	/*
 	 * Put a couple of line seperators in at the apropriate place.
@@ -137,7 +137,7 @@ MenuSelect(Widget w, XtPointer number, XtPointer garbage _X_UNUSED)
 {
     Arg arglist[1];
     Cardinal num_args = 0;
-    int num = (int) number;
+    int num = (int) (intptr_t) number;
 
     printf("Menu item `%s' has been selected.\n", XtName(w));
 

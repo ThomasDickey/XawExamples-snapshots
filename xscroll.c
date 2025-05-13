@@ -119,7 +119,7 @@ Scrolled(
 	XtPointer call_data)
 {
     fprintf(stdout,
-	   "scrolled by %d pixels.\n", (int) call_data );
+	   "scrolled by %d pixels.\n", (int) (intptr_t) call_data );
 }
 
 /*	Function Name: Jumped

@@ -327,7 +327,9 @@ Okay(
 
     if (num_items == allocated_items) {
 	allocated_items += 10;
-	list = (String *) XtRealloc((char *)list, sizeof(String) * allocated_items);
+	list = (String *) XtRealloc((char *)list,
+				    (Cardinal) sizeof(String) *
+				    (Cardinal) allocated_items);
     }
 
     /*
@@ -357,7 +359,7 @@ Scrolled(
 	XtPointer label_ptr,
 	XtPointer value_ptr)
 {
-    int value = (int) value_ptr;
+    int value = (int) (intptr_t) value_ptr;
     Widget label = (Widget) label_ptr;
     Arg args[1];
     char message[BUFSIZ];

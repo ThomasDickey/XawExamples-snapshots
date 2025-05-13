@@ -1,4 +1,4 @@
-## $XTermId: Makefile.in,v 1.2 2025/05/12 09:19:41 tom Exp $
+## $XTermId: Makefile.in,v 1.3 2025/05/13 21:03:45 tom Exp $
 # -----------------------------------------------------------------------------
 # Copyright 2025 by Thomas E. Dickey
 #
@@ -75,6 +75,7 @@ BINDIR		= $(DESTDIR)$(bindir)
 
 C_SOURCE = \
 	popup.c \
+	scrolltext.c \
 	xboxes.c \
 	xbuttonbox.c \
 	xcommand.c \

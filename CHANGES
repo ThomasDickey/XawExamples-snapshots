@@ -1,3 +1,15 @@
+2025-05-13  Thomas E. Dickey  <dickey@invisible-island.net>
+
+	* scrolltext.c: RCS_BASE
+
+	* Makefile.in: add scrolltext example
+
+	* xwidgets.c, xmenu2.c, xscroll.c: gcc warnings
+
+	* examples.h: include stdint.h to define intptr_t
+
+	* popup.c: gcc warning
+
 2025-05-12  Thomas E. Dickey  <dickey@invisible-island.net>
 
 	* Makefile.in: add a "check" rule to run each program
