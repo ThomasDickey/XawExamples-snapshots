@@ -1,0 +1,118 @@
+#include <examples.h>
+
+static Boolean vertically = True;
+
+#define ShowOrient() \
+    	vertically \
+	? "vertically" \
+	: "horizontally"
+
+static Boolean enable_resize = True;
+
+#define ShowResize() \
+    	enable_resize \
+	? "resizable" \
+	: "NOT resizable"
+
+static void
+quit_cb(Widget w, XtPointer client_data _X_UNUSED, XtPointer call_data _X_UNUSED)
+{
+    XtAppSetExitFlag(XtWidgetToApplicationContext(w));
+}
+
+static void
+getnumsub_cb(Widget w, XtPointer client_data _X_UNUSED, XtPointer call_data _X_UNUSED)
+{
+    Widget p = XtParent(w);
+    char 	buf[80];
+    int min, max;
+    XawPanedGetMinMax(w, &min, &max);
+
+    sprintf(buf, "%d number\n%d min %d max\n", XawPanedGetNumSub(p), min, max);
+    XtVaSetValues(w, XtNlabel, buf, NULL);
+}
+
+static void
+oriented_cb(Widget w, XtPointer client_data _X_UNUSED, XtPointer call_data _X_UNUSED)
+{
+    Widget p = XtParent(w);
+    vertically = !vertically;
+    XtVaSetValues(w,
+    	XtNlabel, ShowOrient(),
+	NULL);
+    XtUnmapWidget(p);
+    XtVaSetValues(p,
+    	XtNorientation, vertically ? XtorientVertical : XtorientHorizontal,
+	NULL);
+    XtMapWidget(p);
+}
+
+static void
+refigure_cb(Widget w, XtPointer client_data _X_UNUSED, XtPointer call_data _X_UNUSED)
+{
+    Widget p = XtParent(w);
+    enable_resize = !enable_resize;
+    XtVaSetValues(w, XtNlabel, ShowResize(), NULL);
+    XawPanedSetRefigureMode(p, enable_resize);
+}
+
+int main(int argc, char **argv)
+{
+    Widget toplevel, pane, label, command;
+    XtAppContext app_con;
+
+    toplevel = XtAppInitialize(&app_con, "demo", NULL, 0,
+                               &argc, argv, NULL,
+                               NULL, 0);
+
+    pane = XtVaCreateManagedWidget( "paned", panedWidgetClass, toplevel,
+                                   NULL);
+
+    label = XtVaCreateManagedWidget("Label",
+                                    labelWidgetClass,
+				    pane, XtNlabel, "quick", NULL);
+
+    XawPanedAllowResize(label, False);
+
+    label = XtVaCreateManagedWidget("Label",
+                                    labelWidgetClass,
+				    pane, XtNlabel, "brown", NULL);
+
+    label = XtVaCreateManagedWidget("Label",
+                                    labelWidgetClass,
+				    pane, XtNlabel, "fox", NULL);
+
+    command = XtVaCreateManagedWidget("cmd",
+                                      commandWidgetClass,  pane,
+                                      XtNlabel, ShowOrient(),
+                                      NULL);
+
+    XtAddCallback(command, XtNcallback, oriented_cb, NULL);
+
+    command = XtVaCreateManagedWidget("cmd",
+                                      commandWidgetClass,  pane,
+                                      XtNlabel, ShowResize(),
+                                      NULL);
+
+    XtAddCallback(command, XtNcallback, refigure_cb, NULL);
+
+    command = XtVaCreateManagedWidget("cmd",
+                                      commandWidgetClass,  pane,
+                                      XtNlabel, "getnumsub",
+                                      NULL);
+
+    XtAddCallback(command, XtNcallback, getnumsub_cb, NULL);
+    XawPanedSetMinMax(command, 50, 100);
+
+    command = XtVaCreateManagedWidget("cmd",
+                                      commandWidgetClass,  pane,
+                                      XtNlabel, "EXIT",
+                                      NULL);
+    XtAddCallback(command, XtNcallback, quit_cb, NULL);
+
+    XtRealizeWidget(toplevel);
+
+    XtAppMainLoop(app_con);
+
+    exit(EXIT_SUCCESS);
+}

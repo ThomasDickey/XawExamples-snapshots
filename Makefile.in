@@ -1,4 +1,4 @@
-## $XTermId: Makefile.in,v 1.3 2025/05/13 21:03:45 tom Exp $
+## $XTermId: Makefile.in,v 1.4 2025/05/26 12:18:08 tom Exp $
 # -----------------------------------------------------------------------------
 # Copyright 2025 by Thomas E. Dickey
 #
@@ -74,6 +74,7 @@ BINDIR		= $(DESTDIR)$(bindir)
 #### End of system configuration section. ####
 
 C_SOURCE = \
+	pane.c \
 	popup.c \
 	scrolltext.c \
 	xboxes.c \
@@ -90,7 +91,6 @@ C_SOURCE = \
 	xscroll.c \
 	xtext.c \
 	xwidgets.c
-
 
 PROGRAMS = $(C_SOURCE:.c=)
 

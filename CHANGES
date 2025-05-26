@@ -1,3 +1,19 @@
+2025-05-26  Thomas E. Dickey  <dickey@invisible-island.net>
+
+	* xtext.c: provide for filename as argument
+
+	* pane.c: RCS_BASE
+
+	* Makefile.in: add "pane" example from bug report
+
+2025-05-22  Thomas E. Dickey  <dickey@invisible-island.net>
+
+	* README: replace description with more appropriate summary
+
+2025-05-21  Thomas E. Dickey  <dickey@invisible-island.net>
+
+	* scrolltext.c: include <examples.h> rather than "examples.h"
+
 2025-05-13  Thomas E. Dickey  <dickey@invisible-island.net>
 
 	* scrolltext.c: RCS_BASE

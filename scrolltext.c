@@ -1,7 +1,7 @@
 /*
  * Example from bug report.
  */
-#include "examples.h"
+#include <examples.h>
 
 static void	quit CALLBACK_ARGS;
 static void	print CALLBACK_ARGS;

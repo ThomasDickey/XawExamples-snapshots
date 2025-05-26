@@ -54,6 +54,7 @@ main(int argc, char **argv)
     XtAppContext app_con;
     Widget toplevel, paned, clear, print, text;
     Arg args[1];
+    char *filename = NULL;
 
     toplevel = XtAppInitialize(&app_con, "Xtext", NULL, ZERO,
 			       &argc, argv, fallback_resources,
@@ -64,8 +65,11 @@ main(int argc, char **argv)
      * report an error and exit.
      */
 
-    if (argc != 1)
+    if (argc > 2) {
 	Syntax(app_con, argv[0]);
+    } else if (argc == 2) {
+	filename = argv[1];
+    }
 
     paned = XtCreateManagedWidget("paned", panedWidgetClass, toplevel,
 				  NULL, ZERO);
@@ -76,8 +80,13 @@ main(int argc, char **argv)
     print = XtCreateManagedWidget("print", commandWidgetClass, paned,
 				  NULL, ZERO);
 
-    XtSetArg(args[0], XtNstring,
-	     "This is a\ntest.  If this\nhad been an actual\nemergency...");
+    if (filename != NULL) {
+    } else {
+	XtSetArg(args[0], XtNstring,
+		 "This is a\n"
+		 "test.  If this\n"
+		 "had been an actual\nemergency...");
+    }
 
     text = XtCreateManagedWidget("text", asciiTextWidgetClass, paned,
 				 args, ONE);
@@ -147,7 +156,7 @@ static void
 Syntax(XtAppContext app_con, char *call)
 {
     XtDestroyApplicationContext(app_con);
-    fprintf( stderr, "Usage: %s \n", call);
+    fprintf( stderr, "Usage: %s [filename]\n", call);
     exit(1);
 }
 
