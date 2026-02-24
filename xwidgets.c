@@ -322,12 +322,12 @@ Okay(
 	XtPointer callData _X_UNUSED)
 {
     Widget list_widget = (Widget) clientData;
-    static String * list = NULL;
+    static char **list = NULL;
     static int num_items = 0, allocated_items = 0;
 
     if (num_items == allocated_items) {
 	allocated_items += 10;
-	list = (String *) XtRealloc((char *)list,
+	list = (char **) XtRealloc((char *)list,
 				    (Cardinal) sizeof(String) *
 				    (Cardinal) allocated_items);
     }
