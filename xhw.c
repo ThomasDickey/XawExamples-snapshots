@@ -1,11 +1,14 @@
 /*
- * This an example of how "Hello, World" could be written using
+ * This is an example of how "Hello, World" could be written using
  * The X Toolkit and the Athena widget set.
  *
  * November 14, 1989 - Chris D. Peterson
  */
 
 /*
+ * $XTermId: xhw.c,v 1.3 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xhw.c,v 1.9 91/01/22 19:24:48 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology

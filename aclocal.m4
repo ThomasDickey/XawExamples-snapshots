@@ -1,8 +1,8 @@
-dnl $XTermId: aclocal.m4,v 1.2 2025/12/26 21:52:53 tom Exp $
+dnl $XTermId: aclocal.m4,v 1.3 2026/04/12 18:38:24 tom Exp $
 dnl
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Copyright 2025 by Thomas E. Dickey
+dnl Copyright 2025,2026 by Thomas E. Dickey
 dnl
 dnl                         All Rights Reserved
 dnl
@@ -927,7 +927,7 @@ CF_INTEL_COMPILER(GCC,INTEL_COMPILER,CFLAGS)
 CF_CLANG_COMPILER(GCC,CLANG_COMPILER,CFLAGS)
 ])dnl
 dnl ---------------------------------------------------------------------------
-dnl CF_GCC_WARNINGS version: 45 updated: 2025/12/24 09:07:25
+dnl CF_GCC_WARNINGS version: 47 updated: 2026/04/12 14:38:24
 dnl ---------------
 dnl Check if the compiler supports useful warning options.  There's a few that
 dnl we don't use, simply because they're too noisy:
@@ -953,7 +953,7 @@ AC_REQUIRE([CF_GCC_VERSION])
 if test "x$have_x" = xyes; then CF_CONST_X_STRING fi
 cat > "conftest.$ac_ext" <<EOF
 #line __oline__ "${as_me:-configure}"
-int main(int argc, char *argv[[]]) { return (argv[[argc-1]] == 0) ; }
+int main(int argc, char *argv[[]]) { return (argv[[argc-1]] == (char*)0) ; }
 EOF
 if test "$INTEL_COMPILER" = yes
 then
@@ -2741,7 +2741,7 @@ CF_TRY_PKG_CONFIG(Xext,,[
 		[CF_ADD_LIB(Xext)])])
 ])dnl
 dnl ---------------------------------------------------------------------------
-dnl CF_X_TOOLKIT version: 28 updated: 2025/12/15 04:04:20
+dnl CF_X_TOOLKIT version: 29 updated: 2026/04/08 04:26:01
 dnl ------------
 dnl Check for X Toolkit libraries
 AC_DEFUN([CF_X_TOOLKIT],
@@ -2797,7 +2797,7 @@ AC_CACHE_CHECK(for usable X Toolkit package,cf_cv_xt_ice_compat,[
 AC_LINK_IFELSE([AC_LANG_PROGRAM([
 $ac_includes_default
 #include <X11/Shell.h>
-],[int num = IceConnectionNumber(0); (void) num
+],[int num = IceConnectionNumber(NULL); (void) num
 ])],[cf_cv_xt_ice_compat=yes],[cf_cv_xt_ice_compat=no])])
 
 	if test "$cf_cv_xt_ice_compat" = no

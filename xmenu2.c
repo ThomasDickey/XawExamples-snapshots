@@ -5,6 +5,9 @@
  */
 
 /*
+ * $XTermId: xmenu2.c,v 1.5 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xmenu2.c,v 1.10 91/01/22 19:50:01 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -33,7 +36,7 @@
 #include <X11/bitmaps/xlogo16>
 
 static void MenuSelect CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 String fallback_resources[] = {
 #ifdef COLOR_DISPLAY
@@ -103,10 +106,10 @@ main(int argc, char **argv)
 	 */
 
 	if (i == 4)
-	    entry = XtCreateManagedWidget("line", smeLineObjectClass, menu,
+	    XtCreateManagedWidget("line", smeLineObjectClass, menu,
 					  NULL, ZERO);
 	if (i == 8)
-	    entry = XtCreateManagedWidget("blank", smeObjectClass, menu,
+	    XtCreateManagedWidget("blank", smeObjectClass, menu,
 					  NULL, ZERO);
     }
 
@@ -163,7 +166,7 @@ MenuSelect(Widget w, XtPointer number, XtPointer garbage _X_UNUSED)
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

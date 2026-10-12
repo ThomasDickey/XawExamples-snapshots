@@ -1,4 +1,7 @@
 /*
+ * $XTermId: xpanner.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xpanner.c,v 1.3 91/01/22 19:55:25 gildea Exp $
  *
  * Copyright 1990 Massachusetts Institute of Technology
@@ -59,7 +62,7 @@ static void usage (void)
 
 static void report (Widget w _X_UNUSED, XtPointer closure _X_UNUSED, XtPointer data)
 {
-    XawPannerReport *rep = (XawPannerReport *) data;
+    const XawPannerReport *rep = (XawPannerReport *) data;
     printf ("slider %dx%d+%d+%d in canvas %dx%d\n",
 	    rep->slider_width, rep->slider_height,
 	    rep->slider_x, rep->slider_y,

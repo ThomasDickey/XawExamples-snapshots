@@ -1,5 +1,5 @@
 /*
- * This an example of how to create a composite widget with children
+ * This is an example of how to create a composite widget with children
  * The composite used is a box widget.
  *
  * User events are handled through callback routines.
@@ -8,6 +8,9 @@
  */
 
 /*
+ * $XTermId: xbuttonbox.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xbuttonbox.c,v 1.19 91/01/22 19:44:22 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -32,7 +35,7 @@
 
 #include <examples.h>
 
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 static void Quit CALLBACK_ARGS;
 
 String fallback_resources[] = {
@@ -88,8 +91,7 @@ main(int argc, char **argv)
 	char buf[BUFSIZ];
 
 	sprintf(buf, "labelWidgetName%d", i * i * i * i);
-	command = XtCreateManagedWidget(buf, labelWidgetClass, box,
-					NULL, ZERO);
+	XtCreateManagedWidget(buf, labelWidgetClass, box, NULL, ZERO);
     }
 
     XtRealizeWidget(toplevel);
@@ -122,7 +124,7 @@ Quit(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [ -vspace <value> ] [ -hspace <value> ]\n",

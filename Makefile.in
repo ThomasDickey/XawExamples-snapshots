@@ -1,6 +1,6 @@
-## $XTermId: Makefile.in,v 1.4 2025/05/26 12:18:08 tom Exp $
+## $XTermId: Makefile.in,v 1.6 2026/10/12 09:58:12 tom Exp $
 # -----------------------------------------------------------------------------
-# Copyright 2025 by Thomas E. Dickey
+# Copyright 2025,2026 by Thomas E. Dickey
 #
 #                         All Rights Reserved
 #
@@ -128,4 +128,4 @@ distclean: clean
 	rm -f Makefile config.h config.log config.status
 
 lint:	$(C_SOURCE)
-	$(LINT) $LINT_OPTS) $(C_SOURCE)
+	$(LINT) $(CPPFLAGS) $(LINT_OPTS) $(C_SOURCE)

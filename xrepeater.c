@@ -1,8 +1,11 @@
 /*
- * This an example of how to use the Repeater widget.
+ * This is an example of how to use the Repeater widget.
  */
 
 /*
+ * $XTermId: xrepeater.c,v 1.3 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xrepeater.c,v 1.5 91/01/22 19:24:56 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology

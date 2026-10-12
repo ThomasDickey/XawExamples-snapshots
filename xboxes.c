@@ -1,5 +1,5 @@
 /*
- * This an example of how to create nested composite widgets.
+ * This is an example of how to create nested composite widgets.
  *
  * User events are handled through callback routines.
  *
@@ -9,6 +9,9 @@
  */
 
 /*
+ * $XTermId: xboxes.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xboxes.c,v 1.23 91/01/22 19:44:18 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -33,7 +36,7 @@
 
 #include <examples.h>
 
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 static void MakeBox(Widget, char *);
 static void Quit CALLBACK_ARGS;
 
@@ -185,7 +188,7 @@ Quit(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s\n", call);

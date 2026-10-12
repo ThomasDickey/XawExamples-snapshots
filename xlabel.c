@@ -1,10 +1,13 @@
 /*
- * This an example of how to use the Label widget.
+ * This is an example of how to use the Label widget.
  *
  * November 14, 1989 - Chris D. Peterson
  */
 
 /*
+ * $XTermId: xlabel.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xlabel.c,v 1.9 91/01/22 19:44:27 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -29,7 +32,7 @@
 
 #include <examples.h>
 
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 String fallback_resources[] = { "*Label.Label:    This is xlabel", NULL };
 
@@ -81,7 +84,7 @@ main(int argc, char **argv)
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

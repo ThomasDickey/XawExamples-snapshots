@@ -9,7 +9,7 @@
 #include <examples.h>
 
 static void SelectAction ACTIONS_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 /*
  * NOTE:   \\n is required because the C compiler throws one of them away.
@@ -94,7 +94,7 @@ SelectAction(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

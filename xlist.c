@@ -1,10 +1,13 @@
 /*
- * This example demostrates how to use the Athena List widget.
+ * This is example demostrates how to use the Athena List widget.
  *
  * November 30, 1989 - Chris D. Peterson
  */
 
 /*
+ * $XTermId: xlist.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xlist.c,v 1.5 91/01/22 19:24:50 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -30,7 +33,7 @@
 #include <examples.h>
 
 static void Activate CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 int
 main(int argc, char **argv)
@@ -67,7 +70,7 @@ main(int argc, char **argv)
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s\n", call);
@@ -88,7 +91,7 @@ Activate(
 	XtPointer closure _X_UNUSED,
 	XtPointer call_data)
 {
-    XawListReturnStruct *item = (XawListReturnStruct*)call_data;
+    const XawListReturnStruct *item = (XawListReturnStruct*)call_data;
     printf( "selected item %d; \"%s\"\n", item->list_index, item->string );
 }
 

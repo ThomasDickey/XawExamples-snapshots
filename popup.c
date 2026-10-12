@@ -6,6 +6,9 @@
  */
 
 /*
+ * $XTermId: popup.c,v 1.5 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: popup.c,v 1.8 91/01/22 19:24:22 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -35,7 +38,7 @@ static void Quit CALLBACK_ARGS;		/* main quit button */
 static void ColorTheButton CALLBACK_ARGS;	/* popup ok button */
 static void DestroyPopupPrompt CALLBACK_ARGS;	/* popup cancel button */
 static void Ok ACTIONS_ARGS;		/* calling ColorTheButton */
-static void Syntax(XtAppContext, char *); /* report syntax errors and exit. */
+static void Syntax(XtAppContext, const char *); /* report syntax errors and exit. */
 static int ConvertColor(Widget, char *); /* Convert color name to pixel value */
 
 static String fallback_resources[] = {
@@ -277,6 +280,7 @@ ConvertColor(Widget w, char * color_name)
  * and "XtDefaultBackground".
  */
 
+  memset(&to, 0, sizeof(to));
   XtConvert(w, XtRString, (XrmValuePtr) &from, XtRPixel, (XrmValuePtr) &to);
   if (to.addr == NULL) {
       return(-1);
@@ -293,7 +297,7 @@ ConvertColor(Widget w, char * color_name)
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf(stderr, "Usage: %s\n", call);

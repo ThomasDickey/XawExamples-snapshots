@@ -1,12 +1,15 @@
 /*
  * xtext.c
  *
- * This an example of how to use the Text and Paned widgets.
+ * This is an example of how to use the Text and Paned widgets.
  *
  * November 14, 1989 - Chris D. Peterson
  */
 
 /*
+ * $XTermId: xtext.c,v 1.5 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xtext.c,v 1.16 91/05/16 14:56:23 swick Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -33,7 +36,7 @@
 
 static void ClearText CALLBACK_ARGS;
 static void PrintText CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 String fallback_resources[] = {
     "*input:				True",
@@ -54,7 +57,7 @@ main(int argc, char **argv)
     XtAppContext app_con;
     Widget toplevel, paned, clear, print, text;
     Arg args[1];
-    char *filename = NULL;
+    const char *filename = NULL;
 
     toplevel = XtAppInitialize(&app_con, "Xtext", NULL, ZERO,
 			       &argc, argv, fallback_resources,
@@ -153,7 +156,7 @@ PrintText(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [filename]\n", call);

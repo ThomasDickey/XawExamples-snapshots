@@ -5,6 +5,9 @@
  */
 
 /*
+ * $XTermId: xwidgets.c,v 1.7 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xwidgets.c,v 1.29 91/01/22 20:02:39 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -61,7 +64,7 @@ String fallback_resources[] = {
 static void Destroyed CALLBACK_ARGS;
 static void Quit CALLBACK_ARGS;
 static void Count CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 static void CreateFormWithButtons(Widget);
 static void CreateBox(Widget);
 static void Okay CALLBACK_ARGS;
@@ -208,7 +211,7 @@ CreateBox(Widget parent)
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf(stderr, "Usage: %s\n", call);
@@ -340,7 +343,7 @@ Okay(
      */
 
     list[num_items++] = XtNewString(XawDialogGetValueString(XtParent(widget)));
-    XawListChange(list_widget, list, num_items, 0, True);
+    XawListChange(list_widget, (const char **) list, num_items, 0, True);
 }
 
 /*	Function Name: Scrolled.

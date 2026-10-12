@@ -1,7 +1,7 @@
 /*
  * xscroll.c
  *
- * This an example of how to use the Scrollbar widget.
+ * This is an example of how to use the Scrollbar widget.
  *
  * This example also shows how to set a float resource in an argument list.
  *
@@ -11,6 +11,9 @@
  */
 
 /*
+ * $XTermId: xscroll.c,v 1.5 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xscroll.c,v 1.15 91/01/22 19:44:30 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -37,7 +40,7 @@
 
 static void Scrolled CALLBACK_ARGS;
 static void Jumped CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 static XrmOptionDescRec options[] = {
 {"-horiz",	"scrollbar.orientation", XrmoptionNoArg,  "horizontal"}
@@ -48,7 +51,6 @@ main(int argc, char **argv)
 {
     XtAppContext app_con;
     Widget toplevel, scrollbar;
-    XtArgVal * l_top;
     float top;
     Arg args[2];
     Cardinal num_args;
@@ -78,7 +80,7 @@ main(int argc, char **argv)
 	 * Convince C not to perform an automatic conversion, which
 	 * would truncate 0.5 to 0.
 	 */
-	l_top = (XtArgVal *) &top;
+	XtArgVal * l_top = (XtArgVal *) &top;
 	XtSetArg(args[num_args], XtNtopOfThumb, *l_top); num_args++;
     }
 
@@ -152,7 +154,7 @@ Jumped(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-horiz]\n", call);

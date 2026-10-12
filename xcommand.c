@@ -1,5 +1,5 @@
 /*
- * This an example of how to use the Command widget.
+ * This is an example of how to use the Command widget.
  *
  * User events handled through callback routines.
  *
@@ -7,6 +7,9 @@
  */
 
 /*
+ * $XTermId: xcommand.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xcommand.c,v 1.12 91/01/22 19:44:25 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -32,7 +35,7 @@
 #include <examples.h>
 
 static void Select CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 String fallback_resources[] = {
     "*Command.Label:    Click the left mouse button here",
@@ -93,7 +96,7 @@ Select(Widget w _X_UNUSED, XtPointer call_data _X_UNUSED, XtPointer client_data 
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);

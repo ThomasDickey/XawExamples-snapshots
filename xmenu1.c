@@ -5,6 +5,9 @@
  */
 
 /*
+ * $XTermId: xmenu1.c,v 1.4 2026/10/12 10:18:12 tom Exp $
+ * Copyright 2026, Thomas E. Dickey
+ *
  * $XConsortium: xmenu1.c,v 1.10 91/01/22 19:24:53 gildea Exp $
  *
  * Copyright 1989 Massachusetts Institute of Technology
@@ -32,7 +35,7 @@
 #define streq(a, b)        ( strcmp((a), (b)) == 0 )
 
 static void MenuSelect CALLBACK_ARGS;
-static void Syntax(XtAppContext, char *);
+static void Syntax(XtAppContext, const char *);
 
 String fallback_resources[] = {
 #ifdef COLOR_DISPLAY
@@ -78,8 +81,7 @@ main(int argc, char **argv)
     for (i = 0; i < (int) XtNumber(menu_item_names) ; i++) {
 	char * item = menu_item_names[i];
 
-	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu,
-				      NULL, ZERO);
+	entry = XtCreateManagedWidget(item, smeBSBObjectClass, menu, NULL, ZERO);
 	XtAddCallback(entry, XtNcallback, MenuSelect, NULL);
 
 	/*
@@ -87,8 +89,7 @@ main(int argc, char **argv)
 	 */
 
 	if (i == 2)
-	    entry = XtCreateWidget("blank", smeObjectClass, menu,
-				   NULL, ZERO);
+	    XtCreateWidget("blank", smeObjectClass, menu, NULL, ZERO);
     }
 
     XtRealizeWidget(top);
@@ -124,7 +125,7 @@ MenuSelect(
  */
 
 static void
-Syntax(XtAppContext app_con, char *call)
+Syntax(XtAppContext app_con, const char *call)
 {
     XtDestroyApplicationContext(app_con);
     fprintf( stderr, "Usage: %s [-label <label name>]\n", call);
